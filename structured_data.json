@@ -1,0 +1,148 @@
+{
+  "decisions": [
+    {
+      "id": "D1",
+      "title": "Using FastAPI for the API",
+      "summary": "FastAPI is used for building the API due to its performance and ease of use",
+      "tags": [
+        "API",
+        "FastAPI"
+      ],
+      "source_file": "main.py"
+    },
+    {
+      "id": "D2",
+      "title": "Using Gemini Client",
+      "summary": "Gemini client is used for function-calling tools for task CRUD operations",
+      "tags": [
+        "Gemini",
+        "Client"
+      ],
+      "source_file": "agent_service.py"
+    },
+    {
+      "id": "D1",
+      "title": "Create Tests",
+      "summary": "Create comprehensive tests for the TODO management project",
+      "tags": [
+        "testing",
+        "TODO management"
+      ],
+      "source_file": "tests/"
+    },
+    {
+      "id": "D2",
+      "title": "Select Testing Framework",
+      "summary": "Select Pytest as the testing framework",
+      "tags": [
+        "testing framework",
+        "pytest"
+      ],
+      "source_file": "pytest.ini"
+    }
+  ],
+  "rules": [
+    {
+      "id": "R1",
+      "rule": "Use auto-incrementing string codes for tasks",
+      "scope": "Task Creation",
+      "notes": "Task codes are generated automatically",
+      "source_file": "task.py"
+    },
+    {
+      "id": "R2",
+      "rule": "Update tasks by code",
+      "scope": "Task Update",
+      "notes": "Tasks are updated based on their codes",
+      "source_file": "todo_service.py"
+    },
+    {
+      "id": "R1",
+      "rule": "Write tests for all modules",
+      "scope": "Project-wide",
+      "notes": "Ensure all modules have corresponding test files",
+      "source_file": "tests/"
+    },
+    {
+      "id": "R2",
+      "rule": "Use Pytest markers for test configuration",
+      "scope": "Testing",
+      "notes": "Use custom markers for test configuration and fixtures",
+      "source_file": "conftest.py"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "W1",
+      "area": "Gemini Client",
+      "message": "Gemini calls to update_task would currently fail to dispatch",
+      "severity": "High",
+      "source_file": "agent_service.py"
+    },
+    {
+      "id": "W2",
+      "area": "Dependencies",
+      "message": "FastAPI and google-genai are not yet declared as runtime dependencies",
+      "severity": "Medium",
+      "source_file": "pyproject.toml"
+    },
+    {
+      "id": "W1",
+      "area": "Testing",
+      "message": "Ensure all tests are isolated and have proper state management",
+      "severity": "Medium",
+      "source_file": "tests/"
+    },
+    {
+      "id": "W2",
+      "area": "Code Quality",
+      "message": "Follow standard coding practices and formatting guidelines",
+      "severity": "Low",
+      "source_file": "README.md"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "DEP1",
+      "name": "python-dotenv",
+      "description": "Dependency for environment variables",
+      "related_component": "Runtime",
+      "source_file": "pyproject.toml"
+    },
+    {
+      "id": "DEP2",
+      "name": "pytest",
+      "description": "Dependency for testing",
+      "related_component": "Testing",
+      "source_file": "pyproject.toml"
+    },
+    {
+      "id": "DEP3",
+      "name": "FastAPI",
+      "description": "Dependency for building the API",
+      "related_component": "API",
+      "source_file": "main.py"
+    },
+    {
+      "id": "DEP4",
+      "name": "google-genai",
+      "description": "Dependency for Gemini client",
+      "related_component": "Gemini Client",
+      "source_file": "agent_service.py"
+    },
+    {
+      "id": "DEP1",
+      "name": "Pytest",
+      "description": "Testing framework",
+      "related_component": "Testing",
+      "source_file": "pytest.ini"
+    },
+    {
+      "id": "DEP2",
+      "name": "FastAPI",
+      "description": "Web framework",
+      "related_component": "API Endpoints",
+      "source_file": "test_main.py"
+    }
+  ]
+}

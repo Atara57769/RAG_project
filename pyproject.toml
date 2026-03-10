@@ -1,0 +1,21 @@
+[project]
+name = "rag-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "certifi>=2026.2.25",
+    "chore>=0.8.16",
+    "gradio>=6.9.0",
+    "llama-index>=0.14.15",
+    "llama-index-core>=0.14.15",
+    "llama-index-embeddings-cohere>=0.7.0",
+    "llama-index-embeddings-openai>=0.5.2",
+    "llama-index-llms-groq>=0.4.1",
+    "llama-index-utils-workflow>=0.9.4",
+    "llama-index-vector-stores-pinecone>=0.7.1",
+    "pinecone==7.2.0",
+    "python-certifi-win32>=1.6.1",
+    "utils>=1.0.2",
+]
