@@ -1,8 +1,13 @@
 import json
+import logging
 from pathlib import Path
 from pydantic import BaseModel
 from llama_index.core.program import LLMTextCompletionProgram
 from config.rag_config import llm
+from errors import DataLoadError
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
 
 
 # ---------- Schema ----------
@@ -46,11 +51,11 @@ class ExtractedData(BaseModel):
     dependencies: list[Dependency]
 
 
-# ---------- Structured Extraction ----------
-
-extract_program = LLMTextCompletionProgram.from_defaults(
-    output_cls=ExtractedData,
-    prompt_template_str="""
+def extract_structured_data():
+    try:
+        extract_program = LLMTextCompletionProgram.from_defaults(
+            output_cls=ExtractedData,
+            prompt_template_str="""
 Extract structured project information from the following documentation.
 
 Return JSON with:
@@ -63,44 +68,41 @@ Return JSON with:
 Text:
 {context}
 """,
-    llm=llm,
-)
+            llm=llm,
+        )
+
+        docs_path = Path("docs")
+        result = {
+            "decisions": [],
+            "rules": [],
+            "warnings": [],
+            "dependencies": []
+        }
+
+        for file in docs_path.glob("*.md"):
+            text = file.read_text()
+            extracted = extract_program(context=text)
+            for d in extracted.decisions:
+                result["decisions"].append(d.model_dump())
+            for r in extracted.rules:
+                result["rules"].append(r.model_dump())
+            for w in extracted.warnings:
+                result["warnings"].append(w.model_dump())
+            for dep in extracted.dependencies:
+                result["dependencies"].append(dep.model_dump())
+
+        with open("structured_data.json", "w", encoding="utf-8") as f:
+            json.dump(result, f, indent=2, ensure_ascii=False)
+
+        logger.info("Structured data saved to structured_data.json")
+
+    except Exception as exc:
+        logger.exception("Structured extraction failed")
+        raise DataLoadError("Structured extraction failed") from exc
 
 
-# ---------- Extraction Loop ----------
-
-docs_path = Path("docs")
-
-result = {
-    "decisions": [],
-    "rules": [],
-    "warnings": [],
-    "dependencies": []
-}
-
-for file in docs_path.glob("*.md"):
-
-    text = file.read_text()
-
-    extracted = extract_program(context=text)
-
-    for d in extracted.decisions:
-        result["decisions"].append(d.model_dump())
-
-    for r in extracted.rules:
-        result["rules"].append(r.model_dump())
-
-    for w in extracted.warnings:
-        result["warnings"].append(w.model_dump())
-
-    for dep in extracted.dependencies:
-        result["dependencies"].append(dep.model_dump())
-
-
-# ---------- Save JSON ----------
-
-with open("structured_data.json", "w", encoding="utf-8") as f:
-    json.dump(result, f, indent=2, ensure_ascii=False)
-
-
-print("Structured data saved to structured_data.json")
+if __name__ == "__main__":
+    try:
+        extract_structured_data()
+    except Exception as exc:
+        logger.exception("Extraction failed")

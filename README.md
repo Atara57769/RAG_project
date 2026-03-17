@@ -25,12 +25,14 @@ User Question
 | `chat.py` | Gradio chat interface — main entry point |
 | `workflow.py` | Event-Driven Workflow using LlamaIndex |
 | `events.py` | Event definitions (RouterEvent, RetrieveEvent, etc.) |
-| `global_settings.py` | LLM, Embeddings, Pinecone, and Router configuration |
+| `config/rag_config.py` | LLM, embeddings, Pinecone, and workflow components |
+| `config/route_config.py` | Structured query engine and router selector |
+| `errors.py` | Custom project exceptions (`RagProjectError`, `WorkflowError`, etc.) |
 | `load_data.py` | Index documents into Pinecone (run once) |
 | `extract_structured_data.py` | Extract structured data from docs into JSON (run once) |
 | `structured_data.json` | Structured data: decisions, rules, warnings, dependencies |
 | `docs/` | Source documents folder (`.md` files) |
-| `rag_workflow.html` | Visual diagram of the Workflow |
+| `workflow_visualizations/rag_workflow.html` | Visual diagram of the Workflow |
 
 ---
 
@@ -114,6 +116,15 @@ Open your browser at: http://127.0.0.1:7860
 | `How are tasks created?` | Code and logic for task creation |
 | `What testing framework is used?` | Testing setup and configuration details |
 | `Explain the agent architecture` | Overview from architecture docs |
+
+---
+
+## 🧭 Logging and Errors
+
+This project now uses structured logging (`logging` module) and custom domain exceptions:
+- `errors.py` defines `RagProjectError`, `DataLoadError`, `WorkflowError`, and `QueryError`.
+- `chat.py`, `main.py`, `workflow.py`, and data scripts use `logger.info`/`logger.exception` instead of print.
+- Workflow steps catch exceptions and raise `WorkflowError` to keep the pipeline robust.
 
 ---
 
