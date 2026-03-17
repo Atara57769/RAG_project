@@ -1,4 +1,4 @@
-# 🔍 RAG Project — AI Agent for Project Documentation
+#  RAG Project — AI Agent for Project Documentation
 
 An intelligent RAG (Retrieval-Augmented Generation) system that lets you ask natural language questions about your project's documentation.
 
@@ -6,7 +6,7 @@ The system automatically routes each question to one of two knowledge sources: a
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 User Question
@@ -18,7 +18,7 @@ User Question
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 | File | Purpose |
 |------|---------|
@@ -33,10 +33,12 @@ User Question
 | `structured_data.json` | Structured data: decisions, rules, warnings, dependencies |
 | `docs/` | Source documents folder (`.md` files) |
 | `workflow_visualizations/rag_workflow.html` | Visual diagram of the Workflow |
+| `tests/test_chat.py` | Unit tests for chat response handling and error paths |
+| `tests/test_workflow.py` | Unit tests for workflow steps and routing logic |
 
 ---
 
-## ⚙️ Setup & Installation
+##  Setup & Installation
 
 ### 1. Install Dependencies
 
@@ -96,7 +98,7 @@ Open your browser at: http://127.0.0.1:7860
 
 ---
 
-## 💬 Example Questions
+##  Example Questions
 
 ### Routed to structured_data.json
 
@@ -119,7 +121,7 @@ Open your browser at: http://127.0.0.1:7860
 
 ---
 
-## 🧭 Logging and Errors
+##  Logging and Errors
 
 This project now uses structured logging (`logging` module) and custom domain exceptions:
 - `errors.py` defines `RagProjectError`, `DataLoadError`, `WorkflowError`, and `QueryError`.
@@ -128,7 +130,7 @@ This project now uses structured logging (`logging` module) and custom domain ex
 
 ---
 
-## 🔧 Tech Stack
+##  Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
@@ -141,7 +143,7 @@ This project now uses structured logging (`logging` module) and custom domain ex
 
 ---
 
-## 🔄 How the Routing Works
+##  How the Routing Works
 
 The `PydanticSingleSelector` reads the description of each tool and decides automatically:
 
@@ -152,6 +154,27 @@ The LLM picks the best tool based on the user's question — no manual logic nee
 
 ---
 
-## 📊 Workflow Visualization
+##  Workflow Visualization
 
 After running `chat.py`, a visual diagram of the full workflow is saved to `rag_workflow.html`. Open it in your browser to see all steps and event connections.
+
+---
+
+##  Testing
+
+We added unit tests using `unittest` and mocks for chat and workflow logic.
+
+Run tests with:
+
+```bash
+python -m unittest discover -s tests
+```
+
+If you add new tests, keep them in `tests/` and use `unittest.mock` or `patch` to isolate external dependencies (LLM calls, index retrieval, etc.).
+
+---
+
+##  Notes
+
+- `tests/test_chat.py` covers `chat.respond` behavior for empty input, success path, and error path.
+- `tests/test_workflow.py` covers `RAGWorkflow.start` and `RAGWorkflow.route` routing logic.
