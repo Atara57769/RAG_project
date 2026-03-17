@@ -2,8 +2,8 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
-from workflow import RAGWorkflow
-import events
+from domain.workflow import RAGWorkflow
+from domain import events
 
 
 class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
@@ -35,7 +35,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
         mock_ctx = AsyncMock()
         mock_ctx.store.get = AsyncMock(return_value="Find docs")
 
-        with patch("workflow.selector.select") as mock_select:
+        with patch("domain.workflow.selector.select") as mock_select:
             mock_select.return_value = SimpleNamespace(
                 selections=[SimpleNamespace(index=0)]
             )
@@ -49,7 +49,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
         mock_ctx = AsyncMock()
         mock_ctx.store.get = AsyncMock(return_value="Find docs")
 
-        with patch("workflow.selector.select") as mock_select:
+        with patch("domain.workflow.selector.select") as mock_select:
             mock_select.return_value = SimpleNamespace(
                 selections=[SimpleNamespace(index=1)]
             )
@@ -63,7 +63,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
         mock_ctx = AsyncMock()
         mock_ctx.store.get = AsyncMock(return_value="Find docs")
 
-        with patch("workflow.structured_data_query_engine", return_value="answer"):
+        with patch("domain.workflow.structured_data_query_engine", return_value="answer"):
             next_event = await wf.run_structured_query(mock_ctx, SimpleNamespace())
 
         self.assertIsInstance(next_event, events.StructuredResultEvent)
@@ -74,7 +74,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
         mock_ctx = AsyncMock()
         mock_ctx.store.get = AsyncMock(return_value="Find docs")
 
-        with patch("workflow.structured_data_query_engine", return_value="NOT_FOUND"):
+        with patch("domain.workflow.structured_data_query_engine", return_value="NOT_FOUND"):
             next_event = await wf.run_structured_query(mock_ctx, SimpleNamespace())
 
         self.assertIsInstance(next_event, events.RetrieveEvent)
@@ -85,7 +85,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
         mock_ctx.store.get = AsyncMock(return_value="Find docs")
 
         with patch(
-            "workflow.structured_data_query_engine",
+            "domain.workflow.structured_data_query_engine",
             side_effect=ValueError("oops"),
         ):
             with self.assertRaises(Exception):
@@ -98,7 +98,7 @@ class TestRAGWorkflow(unittest.IsolatedAsyncioTestCase):
 
         ev = events.StructuredResultEvent(answer="found info")
 
-        with patch("workflow.llm") as mock_llm:
+        with patch("domain.workflow.llm") as mock_llm:
             mock_llm.complete.return_value = "final answer"
 
             stop = await wf.finalize_structured_answer(mock_ctx, ev)

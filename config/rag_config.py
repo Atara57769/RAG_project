@@ -17,7 +17,7 @@ from llama_index.core.response_synthesizers import ResponseMode
 from llama_index.embeddings.cohere import CohereEmbedding
 from llama_index.llms.groq import Groq
 from llama_index.vector_stores.pinecone import PineconeVectorStore
-from errors import DataLoadError, RagProjectError
+from domain.errors import DataLoadError, RagProjectError
 
 # Load environment variables
 try:

@@ -11,7 +11,7 @@ from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core import StorageContext
 from pinecone import Pinecone
 import urllib3
-from errors import DataLoadError
+from domain.errors import DataLoadError
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)

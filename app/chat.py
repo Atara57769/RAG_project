@@ -1,11 +1,9 @@
 import logging
 import gradio as gr
-from pathlib import Path
-import workflow
+from domain import workflow
 
-from llama_index.utils.workflow import draw_all_possible_flows
-from errors import RagProjectError, QueryError
-from rag_service import RagService
+from domain.errors import RagProjectError, QueryError
+from services.rag_service import RagService
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -13,12 +11,6 @@ logger = logging.getLogger(__name__)
 rag_wf = workflow.RAGWorkflow(timeout=120)
 
 # Draw static workflow
-draw_all_possible_flows(
-    rag_wf,
-    filename=str(
-        Path("workflow_visualizations/rag_workflow.html").resolve()
-    ),
-)
 
 rag_service = RagService(rag_wf)
 

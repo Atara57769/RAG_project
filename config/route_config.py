@@ -2,7 +2,7 @@ import json
 from llama_index.core.selectors import PydanticSingleSelector
 from llama_index.core.tools import ToolMetadata
 from config.rag_config import llm
-from errors import DataLoadError, RagProjectError
+from domain.errors import DataLoadError, RagProjectError
 
 # Load structured data from JSON with error handling
 try:

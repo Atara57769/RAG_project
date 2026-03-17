@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, AsyncMock
 
-import chat
+from app import chat
 
 
 class TestChatRespond(unittest.IsolatedAsyncioTestCase):

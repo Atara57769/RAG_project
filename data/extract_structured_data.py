@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from llama_index.core.program import LLMTextCompletionProgram
 from config.rag_config import llm
-from errors import DataLoadError
+from domain.errors import DataLoadError
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)

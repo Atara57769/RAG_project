@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 from llama_index.utils.workflow import draw_most_recent_execution
-from errors import RagProjectError, QueryError
+from domain.errors import RagProjectError, QueryError
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class RagService:
             draw_most_recent_execution(
                 handler,
                 filename=str(
-                    Path("workflow_visualizations/last_execution.html").resolve()
+                    Path("../workflow_visualizations/last_execution.html").resolve()
                 ),
             )
 

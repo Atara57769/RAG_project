@@ -1,9 +1,10 @@
 import logging
 from llama_index.core.workflow import Workflow, step, StartEvent, StopEvent, Context
-import events
+
 from config.rag_config import llm, retriever, postprocessor, response_synthesizer
 from config.route_config import selector, choices, structured_data_query_engine
-from errors import WorkflowError
+from domain import events
+from domain.errors import WorkflowError
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)

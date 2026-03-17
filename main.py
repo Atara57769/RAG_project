@@ -1,14 +1,20 @@
-import logging
-import ssl
-from errors import RagProjectError
+from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-logger = logging.getLogger(__name__)
+from llama_index.utils.workflow import draw_all_possible_flows
 
-try:
-    # Log SSL paths for environment debugging
-    logger.info("SSL verify paths: %s", ssl.get_default_verify_paths())
-except Exception as exc:
-    logger.exception("Unable to read SSL default verify paths")
-    raise RagProjectError("Unable to read SSL default verify paths") from exc
+from app.chat import demo, logger, rag_wf
+from domain.errors import RagProjectError
 
+
+if __name__ == "__main__":
+    try:
+        draw_all_possible_flows(
+            rag_wf,
+            filename=str(
+                Path("../workflow_visualizations/rag_workflow.html").resolve()
+            ),
+        )
+        demo.launch()
+    except Exception as exc:
+        logger.exception("Gradio launch failed")
+        raise RagProjectError("Gradio failed to start.") from exc
