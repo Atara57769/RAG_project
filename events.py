@@ -25,3 +25,10 @@ class RouterEvent(Event):
 
 class StructuredAnswerEvent(Event):
     answer: str
+
+class StructuredQueryEvent(Event):
+    pass
+
+
+class StructuredResultEvent(Event):
+    answer: str

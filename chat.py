@@ -9,7 +9,7 @@ rag_wf = workflow.RAGWorkflow(timeout=120)
 draw_all_possible_flows(
     rag_wf,
     filename=str(
-        Path("rag_workflow.html").resolve()
+        Path("workflow_visualizations/rag_workflow.html").resolve()
     ),
 )
 
@@ -17,16 +17,12 @@ draw_all_possible_flows(
 async def respond(message, history):
     handler = rag_wf.run(query=message)
     result = await handler
-
     draw_most_recent_execution(
         handler,
-        filename=str(Path("last_execution.html").resolve()),
+        filename=str(Path("workflow_visualizations.last_execution.html").resolve()),
     )
 
     return str(result)
-
-
-
 
 
 demo = gr.ChatInterface(

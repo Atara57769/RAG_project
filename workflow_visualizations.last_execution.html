@@ -88,8 +88,8 @@
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"color": "#ADD8E6", "id": "filter_nodes", "label": "filter_nodes", "shape": "box", "title": null}, {"color": "#90EE90", "id": "RetrievedNodesEvent", "label": "RetrievedNodesEvent", "shape": "ellipse", "title": null}, {"color": "#90EE90", "id": "FilteredNodesEvent", "label": "FilteredNodesEvent", "shape": "ellipse", "title": null}, {"color": "#90EE90", "id": "NoResultsEvent", "label": "NoResultsEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "handle_no_results", "label": "handle_no_results", "shape": "box", "title": null}, {"color": "#FFA07A", "id": "StopEvent", "label": "StopEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "handle_structured", "label": "handle_structured", "shape": "box", "title": null}, {"color": "#90EE90", "id": "StructuredAnswerEvent", "label": "StructuredAnswerEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "retrieve", "label": "retrieve", "shape": "box", "title": null}, {"color": "#90EE90", "id": "RetrieveEvent", "label": "RetrieveEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "route", "label": "route", "shape": "box", "title": null}, {"color": "#90EE90", "id": "RouterEvent", "label": "RouterEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "start", "label": "start", "shape": "box", "title": null}, {"color": "#E27AFF", "id": "StartEvent", "label": "StartEvent", "shape": "ellipse", "title": null}, {"color": "#ADD8E6", "id": "synthesize", "label": "synthesize", "shape": "box", "title": null}]);
-                  edges = new vis.DataSet([{"arrows": "to", "from": "filter_nodes", "to": "FilteredNodesEvent"}, {"arrows": "to", "from": "filter_nodes", "to": "NoResultsEvent"}, {"arrows": "to", "from": "RetrievedNodesEvent", "to": "filter_nodes"}, {"arrows": "to", "from": "handle_no_results", "to": "StopEvent"}, {"arrows": "to", "from": "NoResultsEvent", "to": "handle_no_results"}, {"arrows": "to", "from": "handle_structured", "to": "StopEvent"}, {"arrows": "to", "from": "StructuredAnswerEvent", "to": "handle_structured"}, {"arrows": "to", "from": "retrieve", "to": "RetrievedNodesEvent"}, {"arrows": "to", "from": "retrieve", "to": "NoResultsEvent"}, {"arrows": "to", "from": "RetrieveEvent", "to": "retrieve"}, {"arrows": "to", "from": "route", "to": "StructuredAnswerEvent"}, {"arrows": "to", "from": "route", "to": "RetrieveEvent"}, {"arrows": "to", "from": "RouterEvent", "to": "route"}, {"arrows": "to", "from": "start", "to": "RouterEvent"}, {"arrows": "to", "from": "start", "to": "NoResultsEvent"}, {"arrows": "to", "from": "StartEvent", "to": "start"}, {"arrows": "to", "from": "synthesize", "to": "StopEvent"}, {"arrows": "to", "from": "FilteredNodesEvent", "to": "synthesize"}]);
+                  nodes = new vis.DataSet([{"color": "#BEDAE4", "id": "external_step", "label": "external_step", "shape": "box"}, {"color": "#E27AFF", "id": "event:StartEvent#0", "label": "StartEvent", "shape": "ellipse"}, {"color": "#ADD8E6", "id": "step:start#1", "label": "start#1", "shape": "box"}, {"color": "#90EE90", "id": "event:RouterEvent#1", "label": "RouterEvent", "shape": "ellipse"}, {"color": "#ADD8E6", "id": "step:route#1", "label": "route#1", "shape": "box"}, {"color": "#90EE90", "id": "event:RetrieveEvent#2", "label": "RetrieveEvent", "shape": "ellipse"}, {"color": "#ADD8E6", "id": "step:retrieve#1", "label": "retrieve#1", "shape": "box"}, {"color": "#90EE90", "id": "event:RetrievedNodesEvent#3", "label": "RetrievedNodesEvent", "shape": "ellipse"}, {"color": "#ADD8E6", "id": "step:filter_nodes#1", "label": "filter_nodes#1", "shape": "box"}, {"color": "#90EE90", "id": "event:FilteredNodesEvent#4", "label": "FilteredNodesEvent", "shape": "ellipse"}, {"color": "#ADD8E6", "id": "step:synthesize#1", "label": "synthesize#1", "shape": "box"}, {"color": "#FFA07A", "id": "event:StopEvent#5", "label": "StopEvent", "shape": "ellipse"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "external_step", "to": "event:StartEvent#0"}, {"arrows": "to", "from": "event:StartEvent#0", "to": "step:start#1"}, {"arrows": "to", "from": "step:start#1", "to": "event:RouterEvent#1"}, {"arrows": "to", "from": "external_step", "to": "event:RouterEvent#1"}, {"arrows": "to", "from": "event:RouterEvent#1", "to": "step:route#1"}, {"arrows": "to", "from": "step:route#1", "to": "event:RetrieveEvent#2"}, {"arrows": "to", "from": "external_step", "to": "event:RetrieveEvent#2"}, {"arrows": "to", "from": "event:RetrieveEvent#2", "to": "step:retrieve#1"}, {"arrows": "to", "from": "step:retrieve#1", "to": "event:RetrievedNodesEvent#3"}, {"arrows": "to", "from": "external_step", "to": "event:RetrievedNodesEvent#3"}, {"arrows": "to", "from": "event:RetrievedNodesEvent#3", "to": "step:filter_nodes#1"}, {"arrows": "to", "from": "step:filter_nodes#1", "to": "event:FilteredNodesEvent#4"}, {"arrows": "to", "from": "external_step", "to": "event:FilteredNodesEvent#4"}, {"arrows": "to", "from": "event:FilteredNodesEvent#4", "to": "step:synthesize#1"}, {"arrows": "to", "from": "step:synthesize#1", "to": "event:StopEvent#5"}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });
@@ -100,35 +100,7 @@
                   // adding nodes and edges to the graph
                   data = {nodes: nodes, edges: edges};
 
-                  var options = {
-    "configure": {
-        "enabled": false
-    },
-    "edges": {
-        "color": {
-            "inherit": true
-        },
-        "smooth": {
-            "enabled": true,
-            "type": "dynamic"
-        }
-    },
-    "interaction": {
-        "dragNodes": true,
-        "hideEdgesOnDrag": false,
-        "hideNodesOnDrag": false
-    },
-    "physics": {
-        "enabled": true,
-        "stabilization": {
-            "enabled": true,
-            "fit": true,
-            "iterations": 1000,
-            "onlyDynamicEdges": false,
-            "updateInterval": 50
-        }
-    }
-};
+                  var options = {"layout": {"hierarchical": {"enabled": true, "direction": "LR", "nodeSpacing": 150, "levelSeparation": 120}}, "physics": {"enabled": false}};
 
                   
 

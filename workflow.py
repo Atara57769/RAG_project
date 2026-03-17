@@ -1,10 +1,7 @@
-import json
-
-from llama_index.core.query_engine import router_query_engine
 from llama_index.core.workflow import Workflow, step, StartEvent, StopEvent, Context
 import events
-from global_settings import *
-
+from config.rag_config import llm, retriever, postprocessor, response_synthesizer
+from config.route_config import selector, choices, structured_data_query_engine
 
 
 class RAGWorkflow(Workflow):
@@ -18,30 +15,50 @@ class RAGWorkflow(Workflow):
         return events.RouterEvent()
 
     @step
-    async def route(self, ctx: Context, ev: events.RouterEvent) -> events.StructuredAnswerEvent | events.RetrieveEvent:
+    async def route(self, ctx: Context, ev: events.RouterEvent) -> events.StructuredQueryEvent | events.RetrieveEvent:
+
         query = await ctx.store.get("query")
 
-        response = router_query_engine.query(query)
-        selected = response.metadata.get("selector_result")
+        result = selector.select(choices, query=query)
+        selected_index = result.selections[0].index
 
-        # אם הRouter בחר את list_tool (index 0) → JSON
-        if selected and selected.selections[0].index == 0:
-            return events.StructuredAnswerEvent(answer=str(response))
+        if selected_index == 0:
+            return events.StructuredQueryEvent()
 
-        # אחרת → מסלול סמנטי
         return events.RetrieveEvent()
 
     @step
-    async def handle_structured(self, ctx: Context, ev: events.StructuredAnswerEvent) -> StopEvent:
+    async def run_structured_query(
+            self, ctx: Context, ev: events.StructuredQueryEvent
+    ) -> events.StructuredResultEvent | events.RetrieveEvent:
+
+        query = await ctx.store.get("query")
+
+
+        response = structured_data_query_engine(query)
+
+        # fallback אם אין תשובה
+        if "NOT_FOUND" in response:
+            return events.RetrieveEvent()
+
+        return events.StructuredResultEvent(answer=response)
+
+    @step
+    async def finalize_structured_answer(
+            self, ctx: Context, ev: events.StructuredResultEvent
+    ) -> StopEvent:
+
         query = await ctx.store.get("query")
 
         final = llm.complete(f"""
-            Based on the following information, answer the user's question clearly.
-        
-            Question: {query}
-            Information: {ev.answer}
-            """)
+        Answer the question clearly based on the structured information.
+
+        Question: {query}
+        Information: {ev.answer}
+        """)
+
         return StopEvent(result=str(final))
+
 
 
     @step

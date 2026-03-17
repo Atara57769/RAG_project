@@ -2,8 +2,7 @@ import json
 from pathlib import Path
 from pydantic import BaseModel
 from llama_index.core.program import LLMTextCompletionProgram
-from llama_index.core import Settings
-from global_settings import llm
+from config.rag_config import llm
 
 
 # ---------- Schema ----------
