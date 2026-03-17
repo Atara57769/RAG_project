@@ -1,17 +1,18 @@
 import logging
-
 import gradio as gr
 from pathlib import Path
 import workflow
 
-from llama_index.utils.workflow import draw_all_possible_flows, draw_most_recent_execution
+from llama_index.utils.workflow import draw_all_possible_flows
 from errors import RagProjectError, QueryError
+from rag_service import RagService
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-# Create workflow
 rag_wf = workflow.RAGWorkflow(timeout=120)
+
+# Draw static workflow
 draw_all_possible_flows(
     rag_wf,
     filename=str(
@@ -19,23 +20,20 @@ draw_all_possible_flows(
     ),
 )
 
-# Gradio response with exception handling
+rag_service = RagService(rag_wf)
+
+
 async def respond(message, history):
     try:
-        if not message or not str(message).strip():
-            raise QueryError("A non-empty chat question is required.")
+        return await rag_service.handle_query(message)
 
-        handler = rag_wf.run(query=message)
-        result = await handler
-        draw_most_recent_execution(
-            handler,
-            filename=str(Path("workflow_visualizations/last_execution.html").resolve()),
-        )
-        return str(result)
+    except QueryError as e:
+        return f"Error: {e}"
+
     except RagProjectError as e:
         return f"Error: {e}"
+
     except Exception as e:
-        # Catch all unexpected workflow exceptions
         logger.exception("Unhandled workflow exception")
         return f"Unhandled error: {e}"
 

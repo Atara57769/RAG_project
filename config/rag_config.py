@@ -1,5 +1,14 @@
-import os
+import ssl
 import urllib3
+import os
+import certifi
+
+ssl._create_default_https_context = ssl._create_unverified_context
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
+os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
+import os
 from dotenv import load_dotenv
 from pinecone import Pinecone
 from llama_index.core import Settings, VectorStoreIndex, get_response_synthesizer
@@ -9,8 +18,6 @@ from llama_index.embeddings.cohere import CohereEmbedding
 from llama_index.llms.groq import Groq
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from errors import DataLoadError, RagProjectError
-
-urllib3.disable_warnings()
 
 # Load environment variables
 try:
